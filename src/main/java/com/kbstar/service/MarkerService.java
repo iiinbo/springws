@@ -47,4 +47,10 @@ public class MarkerService implements KBService<Integer, Marker> {
         return  mapper.selectall(); // 전체조회해주겠다.. dao에서;
     }
 
+    // 해당지역의 맛집만 조회하기(DB에선 marker 의 loc(문자)를 가져오기 )
+    // 함수명은 맘대로 지었다.
+    public List<Marker> getmybob(String cloc) throws Exception {
+        return  mapper.getmybob(cloc); // 전체조회해주겠다.. dao에서;
+    }
+
 }

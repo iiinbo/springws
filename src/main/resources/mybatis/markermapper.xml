@@ -10,6 +10,11 @@
     <select id="select" parameterType="Integer" resultType="marker">
         SELECT * FROM marker WHERE id=#{id}
     </select>
+    <!-- 해당 지역의 맛집만 조회해주기. 맨 마지막줄만 추가. cloc-->
+    <select id="getmybob" parameterType="String"  resultType="marker">
+        SELECT * FROM marker where loc=#{loc}
+    </select>
+
     <select id="selectall" resultType="marker">
         SELECT * FROM marker
     </select>

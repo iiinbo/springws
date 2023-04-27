@@ -23,13 +23,13 @@
       init:function (){
         this.display(); // 지도 뿌려줘~
         $('#s_btn').click(function (){
-          map03.go(37.5452446, 127.0570452, 's');
+          map03.go(37.5452446, 127.0570452, 'S');
         } ); // 각 버튼에 이벤트 발생시키기.
         $('#b_btn').click(function (){
-          map03.go(35.1531696, 129.118666, 'b');
+          map03.go(35.1531696, 129.118666, 'B');
         } );
         $('#j_btn').click(function (){
-          map03.go(33.5042977, 126.954048, 'j');
+          map03.go(33.5042977, 126.954048, 'J');
         } );
       },
       display:function (){
@@ -68,6 +68,7 @@
         marker.setMap(map);
         map03.markers(loc);
       },
+
       //**새로 추가한 함수. 해당 지역의 맛집정보 가져오기
       markers:function (loc){
         $.ajax({

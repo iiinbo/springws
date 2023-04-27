@@ -2,8 +2,11 @@ package com.kbstar.controller;
 
 import com.kbstar.dto.Cust;
 import com.kbstar.dto.Marker;
+import com.kbstar.service.CustService;
+import com.kbstar.service.MarkerService;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,6 +17,9 @@ import java.util.Random;
 
 @RestController // ajax에서 요청이 들어오면 그 요청을 받고 전달하는 곳! @RestController
 public class AjaxImplController {
+    @Autowired
+    MarkerService service;
+
     // 서버의 시간 실시간으로 보여주기
     @RequestMapping("/getservertime")
     public Object getservertime(){ // object : 화면(문자) 외에, 다양한 것(server 정보 등)으로 결과 return 가능.
@@ -55,32 +61,38 @@ public class AjaxImplController {
         return ja;
     }
 
-    //마커 지역에 따라  설정된 맛집리스트 안내해주기
+    //마커 지역에 따라  설정된 맛집리스트 안내해주기 1
+//    @RequestMapping("/markers")
+//    public Object markers(String loc) throws Exception{ // ajax에서 보내주는 값 : loc.
+//
+//        List<Marker> list = service.get();
+//
+//        JSONArray ja = new JSONArray();
+//        for(Marker obj : list){
+//            JSONObject jo = new JSONObject();
+//
+//            jo.put("id", obj.getId() );
+//            jo.put("title", obj.getTitle() );
+//            jo.put("target", obj.getTarget() );
+//            jo.put("lat", obj.getLat() );
+//            jo.put("lng", obj.getLng() );
+//            jo.put("img", obj.getImg() );
+//            jo.put("loc", obj.getLoc() );
+//            ja.add(jo);
+//        }
+//        return ja;
+//    }
+
+    //마커 지역에 따라  설정된 맛집리스트 안내해주기 2
     @RequestMapping("/markers")
-    public Object markers(String loc){ // ajax에서 보내주는 값 : loc.
-        List<Marker> list = new ArrayList<>();
-        if(loc.equals("s")){
-           list.add(new Marker(100,"담미온","http://www.naver.com", 37.5452455, 127.0570455, "a.jpg", "s"));
-           list.add(new Marker(101,"제주국수","http://www.naver.com", 37.5452456, 127.0570445, "b.jpg", "s"));
-           list.add(new Marker(102,"밥플러스","http://www.naver.com", 37.5452458, 127.0570435, "c.jpg", "s"));
+    public Object markers(String loc) throws Exception{ // ajax에서 보내주는 값 : loc.
+        List<Marker> list = service.getmybob(loc);
 
-        }else if (loc.equals("b")) {
-            list.add(new Marker(201,"싱싱해횟집","http://www.naver.com", 34.5452455, 127.0570455, "d.jpg", "b"));
-            list.add(new Marker(202,"빨리와참치집","http://www.naver.com", 33.5452456, 127.0570445, "e.jpg", "b"));
-            list.add(new Marker(203,"가지마국밥집","http://www.naver.com", 32.5452458, 127.0570435, "c.jpg", "b"));
-
-        }else if(loc.equals("j")){
-            list.add(new Marker(301,"섭지코지옆맛집","http://www.naver.com", 37.5552455, 127.0570455, "a.jpg", "j"));
-            list.add(new Marker(302,"고기국수","http://www.naver.com", 37.5452446, 127.0570425, "b.jpg", "j"));
-            list.add(new Marker(303,"해녀의집","http://www.naver.com", 37.5452468, 127.0570415, "c.jpg", "j"));
-
-        }
 
         JSONArray ja = new JSONArray();
         for(Marker obj : list){
             JSONObject jo = new JSONObject();
-            Random r = new Random();
-            int i = r.nextInt(100)+1 ; //1부터 100까지 랜덤 숫자
+
             jo.put("id", obj.getId() );
             jo.put("title", obj.getTitle() );
             jo.put("target", obj.getTarget() );
