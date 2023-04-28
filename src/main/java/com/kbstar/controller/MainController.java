@@ -1,14 +1,19 @@
 package com.kbstar.controller;
 
 import com.kbstar.dto.Cust;
+import com.kbstar.service.CustService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class MainController {
+
+    @Autowired
+    CustService service;
     Logger logger = LoggerFactory.getLogger(this.getClass().getSimpleName());
     // 127.0.0.1
     @RequestMapping("/")
@@ -40,8 +45,14 @@ public class MainController {
     }
     // 회원가입 > 회원가입impl
     @RequestMapping("/registerimpl")
-    public String registerimpl(Model model, Cust cust){ //사용자 전체정보가 필요한 경우 : CustDTO 이용해보기.
-        logger.info(cust.toString());
+    public String registerimpl(Model model, Cust cust) throws Exception { //사용자 전체정보가 필요한 경우 : CustDTO 이용해보기.
+        // 가입완료 정보를 DB에 저장하기
+        try {
+            service.register(cust);
+        } catch (Exception e) {
+            throw new Exception("회원가입에 실패했습니다. ER0005");
+        }
+
         model.addAttribute("rcust",cust);
         //custDTO정보를 rcust 에 담아서, 화면에 뿌릴 때 사용하기(사용법 : ${rcust.name}. key값(rcust), val값(custDTO)
         model.addAttribute("center", "registerok"); // center에는 register페이지가 뿌려져라.

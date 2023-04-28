@@ -45,10 +45,17 @@ public class CustController {
     // cust - leftNav "all" 클릭 시 나오는 center 페이지
     @RequestMapping("/all") // 127.0.0.1/cust/all
 
-    public String all(Model model) throws Exception{
+    public String all(Model model) throws Exception {
+        // 상세설명 : List<Cust> list = null ; 담기위해 바구니를 준비한다는 의미
 
-        List<Cust> list = service.get();
-
+        // 선생님 방법 : public 옆에 throws Exception 안 붙이고, 아래처럼 쓴 뒤
+        // get 함수에 빨간색 누르면 try-catch 문으로 나온다. 예외처리 가능~
+        List<Cust> list = null;
+        try {
+            list = service.get();
+        } catch (Exception e) {
+            throw new Exception("시스템 장애 발생 : ER0001");
+        }
 
         model.addAttribute("clist", list); // db에 저장된 list 보여주기(jsp파일에서 clist로 사용)
         model.addAttribute("center", dir + "all"); // center만 변경

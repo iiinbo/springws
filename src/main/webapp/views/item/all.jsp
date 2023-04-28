@@ -2,20 +2,14 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--JSTL : 통화 날짜를 표현하게 해주는 문법--%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-  <title>main</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+
 <style>
   img{
     width: 50px;
     height: 50px;
   }
 </style>
-</head>
-<body>
+
 
   <%-- cust : 센터 시작  --%>
   <div class="col-sm-12">
@@ -53,6 +47,3 @@
   </div>
 
 
-</body>
-</html>
-<fmt:formatDate  value="${c.rdate}" pattern="yyyy-MM-dd hh:mm:ss" />

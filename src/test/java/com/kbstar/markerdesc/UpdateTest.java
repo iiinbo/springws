@@ -1,7 +1,8 @@
-package com.kbstar.marker;
+package com.kbstar.markerdesc;
 
-import com.kbstar.dto.Adm;
 import com.kbstar.dto.Marker;
+import com.kbstar.dto.Markerdesc;
+import com.kbstar.service.MarkerDescService;
 import com.kbstar.service.MarkerService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -16,13 +17,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class UpdateTest {
     @Autowired
-    MarkerService service;
+    MarkerDescService service;
     @Test
     void contextLoads() {
     // cust 객체 만들어서 아규먼트 넣어본다. 테스트 ok
-        Marker obj = new Marker(108,"양꼬치집","http://www.google.com", 33.4996002, 126.5273787,"yang.jpg", "J");
+        Markerdesc obj = new Markerdesc(10, 108, "양꼬치", 21000,"yang2.jpg");
         try {
-            service.modify( new Marker(108,"꼬치피었네 건대점","http://www.google.com",  38.2222, 126.5555,"yang.jpg", "J") );
+            service.modify( new Markerdesc(10,108, "생양꼬치",23000, "yang2.jpg") );
             log.info("------- Marker(맛집추천) 정보 정상 수정완료 -------");
         } catch (Exception e) { // 오류 예외처리(자동)
             //throw new RuntimeException(e)

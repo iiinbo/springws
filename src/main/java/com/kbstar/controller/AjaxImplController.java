@@ -19,6 +19,8 @@ import java.util.Random;
 public class AjaxImplController {
     @Autowired
     MarkerService service;
+    @Autowired
+    CustService custService; // 회원가입 시 id중복확인 위해
 
     // 서버의 시간 실시간으로 보여주기
     @RequestMapping("/getservertime")
@@ -28,12 +30,16 @@ public class AjaxImplController {
     }
     //id 중복체크
     @RequestMapping("/checkid")
-    public Object checkid(String id){ // ajax에서 보내주는 값 : id.
-       int data = 0; // 사용가능한 id는 '0'
-        if( id.equals("qqqq")|| id.equals("aaaa")|| id.equals("ssss") ){
-           data = 1; // 사용불가한 id는 '1'
+    public Object checkid(String id) throws Exception { // ajax에서 보내주는 값 : id.
+       
+        Cust cust = null;
+        cust = custService.get(id);
+       int result = 0; // id 존재 '1', 미존재 '0' 
+        
+        if(cust != null ){ // cust에 회원정보 id가 있다면,
+          result = 1; // 기존재
        }
-        return data;
+        return result;
     }
     //DB에 있는 정보를 json으로 바꿔 보내주기
     @RequestMapping("/getdata")
@@ -61,35 +67,18 @@ public class AjaxImplController {
         return ja;
     }
 
-    //마커 지역에 따라  설정된 맛집리스트 안내해주기 1
-//    @RequestMapping("/markers")
-//    public Object markers(String loc) throws Exception{ // ajax에서 보내주는 값 : loc.
-//
-//        List<Marker> list = service.get();
-//
-//        JSONArray ja = new JSONArray();
-//        for(Marker obj : list){
-//            JSONObject jo = new JSONObject();
-//
-//            jo.put("id", obj.getId() );
-//            jo.put("title", obj.getTitle() );
-//            jo.put("target", obj.getTarget() );
-//            jo.put("lat", obj.getLat() );
-//            jo.put("lng", obj.getLng() );
-//            jo.put("img", obj.getImg() );
-//            jo.put("loc", obj.getLoc() );
-//            ja.add(jo);
-//        }
-//        return ja;
-//    }
 
-    //마커 지역에 따라  설정된 맛집리스트 안내해주기 2
+    //마커 지역에 따라  설정된 맛집리스트 안내해주기
     @RequestMapping("/markers")
-    public Object markers(String loc) throws Exception{ // ajax에서 보내주는 값 : loc.
-        List<Marker> list = service.getmybob(loc);
-
-
-        JSONArray ja = new JSONArray();
+    public Object markers(String loc) throws Exception { // ajax에서 보내주는 값 : loc.
+        List<Marker> list = null;
+        try {
+            list = service.getmybob(loc);
+        } catch (Exception e) {
+            throw new Exception("Marker(맛집추천) 조회 에러 : ER0003 ");
+        }
+        // 위 3개의 데이터를
+        JSONArray ja = new JSONArray(); // array 안에 넣는다.
         for(Marker obj : list){
             JSONObject jo = new JSONObject();
 

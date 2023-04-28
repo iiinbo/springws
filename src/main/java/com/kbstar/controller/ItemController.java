@@ -2,6 +2,7 @@ package com.kbstar.controller;
 
 import com.kbstar.dto.Item;
 import com.kbstar.service.ItemService;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,9 +11,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-
+@Slf4j
 @Controller
 @RequestMapping("/item")
 public class ItemController {
@@ -37,9 +37,13 @@ public class ItemController {
     }
     // item - leftNav "all" 클릭 시 나오는 center 페이지
     @RequestMapping("/all") // 127.0.0.1/item/all
-    public String all(Model model) throws Exception{
-
-        List<Item> list = service.get();
+    public String all(Model model) throws Exception {
+        List<Item> list = new ArrayList<>();
+        try {
+            list = service.get();
+        } catch (Exception e) {
+            throw new Exception("시스템 장애 : ER0002");
+        }
 
         model.addAttribute("allitem", list);
 

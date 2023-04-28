@@ -14,5 +14,5 @@ import java.util.List;
 public interface MarkerMapper extends KBMapper<Integer, Marker> {
 
     // 특정지역 담은 본인의 맛집만 조회되도록 할 것이다.(기존 기능들 외 추가하기)
-    public List<Marker> getmybob(String cloc); // db에서 loc 스트링 가져오기.
+    public List<Marker> getmybob(String loc); // db에서 loc 스트링 가져오기.
 }

@@ -23,7 +23,8 @@
       init:function (){
         this.display(); // 지도 뿌려줘~
         $('#s_btn').click(function (){
-          map03.go(37.5452446, 127.0570452, 'S');
+          map03.go(37.5452446, 127.0570452, 'S'); // *go : 이동시켜달란 함수
+          // *서버에다가 'S' 던지고 해당하는 데이터를 줘
         } ); // 각 버튼에 이벤트 발생시키기.
         $('#b_btn').click(function (){
           map03.go(35.1531696, 129.118666, 'B');
@@ -32,6 +33,7 @@
           map03.go(33.5042977, 126.954048, 'J');
         } );
       },
+      // 1 . display : 화면에 지도를 그려줘
       display:function (){
         //카카오 참조
         var mapContainer = document.querySelector('#map03 > #map'); // 지도 뿌릴 영역
@@ -39,6 +41,7 @@
           center: new kakao.maps.LatLng(37.5452446, 127.0570452), // 지도의 중심좌표 성수!
           level: 5 // 지도의 확대 레벨
         };
+        // 2. 이때 map 함수가 만들어진다
         map = new kakao.maps.Map(mapContainer, mapOption); // 지도 그리기
         var mapTypeControl = new kakao.maps.MapTypeControl(); // 컨트롤 만들기
         // 지도에 컨트롤을 추가해야 지도위에 표시됩니다
@@ -51,11 +54,32 @@
         map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
 
       },
+      // * 지도가 이동되는 곳
       go:function (lat, lng, loc){ // go를 하려면 경도와 위도 받아오면 됨. +loc
-        //카카오에서 참조
-        var moveLatLon = new kakao.maps.LatLng(lat, lng); // 이동할 위치는 각자 다르니까.
-        map.panTo(moveLatLon);
-        // 지도 이동 먼저 하고, 마커 표시하자.
+
+        // ** 선생님과 함께 위에서 복사해온 내용
+        var mapContainer = document.querySelector('#map03 > #map'); // 지도 뿌릴 영역
+        var mapOption = {
+          center: new kakao.maps.LatLng(lat, lng), // 지도의 중심좌표 : 성수로 되어있었는데, 다시 만들기로 수정
+          level: 5 // 지도의 확대 레벨
+        };
+        // 2. 이때 map 함수가 만들어진다
+        map = new kakao.maps.Map(mapContainer, mapOption); // 지도 그리기
+        // ** 컨트롤러 안먹어서 다시 위에서 가져와 붙이기.
+        var mapTypeControl = new kakao.maps.MapTypeControl(); // 컨트롤 만들기
+        // 지도에 컨트롤을 추가해야 지도위에 표시됩니다
+        // kakao.maps.ControlPosition은 컨트롤이 표시될 위치를 정의하는데 TOPRIGHT는 오른쪽 위를 의미합니다
+        map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
+
+        // 지도 확대 축소를 제어할 수 있는  줌 컨트롤을 생성합니다
+        var zoomControl = new kakao.maps.ZoomControl();
+
+        map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
+
+        //카카오에서 참조(주석처리했음 이후에)
+        // var moveLatLon = new kakao.maps.LatLng(lat, lng); // 이동할 위치는 각자 다르니까.
+        // map.panTo(moveLatLon);
+        // panTo : 지도 이동 먼저 하고, 마커 표시하자.
         // 마커가 표시될 위치입니다
         var markerPosition  = new kakao.maps.LatLng(lat, lng); // 마커 3군데
 
@@ -66,14 +90,14 @@
 
         // 마커가 지도 위에 표시되도록 설정합니다
         marker.setMap(map);
-        map03.markers(loc);
+        map03.markers(loc); // *'S'데이터 줘~
       },
 
-      //**새로 추가한 함수. 해당 지역의 맛집정보 가져오기
+      //**새로 추가한 함수. 해당 지역의 맛집정보 가져오라고 ajax로 요청 중!
       markers:function (loc){
         $.ajax({
-          url:'/markers',
-          data:{'loc':loc},
+          url:'/markers', // ajaxImpl컨트롤러에서 처리
+          data:{'loc':loc}, // *'S'데이터 줘~ 요청:결과
           success:function (data){
             map03.displaymarkers(data);
           }
@@ -95,7 +119,7 @@
           });
           // infoWindow
           var iwContent = '<h2>'+positions[i].title+'</h2>';
-          iwContent += '<img src="/img/'+positions[i].img+'" style="width:50px">';
+          iwContent += '<img src="/uimg/'+positions[i].img+'" style="width:50px">';
 
           var infowindow = new kakao.maps.InfoWindow({
             position : marcerposition,
@@ -104,7 +128,7 @@
 
           kakao.maps.event.addListener(marker, 'mouseover', mouseoverListener(marker, infowindow));
           kakao.maps.event.addListener(marker, 'mouseout', mouseoutListener(marker, infowindow));
-          kakao.maps.event.addListener(marker, 'click', mouseclickListener(positions[i].target));
+          kakao.maps.event.addListener(marker, 'click', mouseclickListener(positions[i].id)); // 교체
 
 
           function mouseoverListener(marker, infowindow) {
@@ -119,7 +143,7 @@
           }
           function mouseclickListener(target) {
             return function(){
-              location.href = target;
+              location.href = '/map/detail?id='+target; // target : 마커 클릭 시 연동되는 페이지 주소의 url -> 맛집 id로 교체
             };
           }
 

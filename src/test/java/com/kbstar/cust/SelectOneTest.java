@@ -17,10 +17,13 @@ class SelectOneTest {
     CustService service;
     @Test
     void contextLoads() {
+        Cust cust = null;
     // cust 객체 만들어서 아규먼트 넣어본다.  테스트해보려고 ok
 
         try {
-            service.get( "id01" );
+            cust = service.get( "id01111" );
+            log.info("----------------------");
+            log.info(cust.toString());
 
         } catch (Exception e) { // 오류 예외처리(자동)
             //throw new RuntimeException(e);
